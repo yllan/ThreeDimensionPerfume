@@ -48,6 +48,7 @@
       var windowHalfY = window.innerHeight / 2;
       var pointLight;
       var lightMesh;
+      var perfume = [];
 
       init();
       animate();
@@ -72,14 +73,14 @@
         directionalLight.position.set( 0, 0, -1 ).normalize();
         scene.add( directionalLight );
 
-        pointLight = new THREE.PointLight( 0xffaa00 );
+        pointLight = new THREE.PointLight( 0x00aaff );
         pointLight.position.set( 0, 0, 0 );
         scene.add( pointLight );
 
         // light representation
-        sphere = new THREE.SphereGeometry( 100, 16, 8, 1 );
+        sphere = new THREE.SphereGeometry( 0, 0, 0, 0 );
         lightMesh = new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x00aa00 } ) );
-        lightMesh.scale.set( 0.0, 0.0, 0.0 );
+        lightMesh.scale.set( 0.001, 0.001, 0.001 );
         lightMesh.position = pointLight.position;
         scene.add( lightMesh );
 
@@ -115,13 +116,14 @@
 
           object.position.y = - 150;
           scene.add( object );
+          perfume.push(object);
 
         });
         loader.load( 'model1.obj' );
         loader.load( 'model2.obj' );
         loader.load( 'model3.obj' );
         //
-
+        
         renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true});
         renderer.setSize( window.innerWidth, window.innerHeight );
         container.appendChild( renderer.domElement );
@@ -165,16 +167,21 @@
       var r = 0;
 
       function render() {
-
+        
         camera.position.x += ( mouseX - camera.position.x ) * .05;
         camera.position.y += ( - mouseY - camera.position.y ) * .05;
 
         camera.lookAt( scene.position );
 
-        lightMesh.position.x = 700 * Math.cos( r );
-        lightMesh.position.z = 700 * Math.sin( r );
 
-        r += 0.01;
+        if (typeof perfume[0] != 'undefined') perfume[0].rotation.y += 0.001;
+        if (typeof perfume[1] != 'undefined') perfume[1].rotation.y += 0.001;
+        if (typeof perfume[2] != 'undefined') perfume[2].rotation.y += 0.001;
+
+        lightMesh.position.x = 500 * Math.cos( r );
+        lightMesh.position.z = 500 * Math.sin( r );
+
+        r += 0.05;
 
         renderer.render( scene, camera );
 
